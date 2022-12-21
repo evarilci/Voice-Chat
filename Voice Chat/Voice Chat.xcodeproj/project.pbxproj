@@ -22,6 +22,8 @@
 		E51A1D63295386C00050B713 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E51A1D62295386C00050B713 /* FirebaseFirestore */; };
 		E51A1D6629538C6E0050B713 /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D6529538C6D0050B713 /* RecentViewController.swift */; };
 		E51A1D69295392E30050B713 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D68295392E30050B713 /* TabBarViewController.swift */; };
+		E51A1D6E29539DBD0050B713 /* RecentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D6D29539DBD0050B713 /* RecentTableView.swift */; };
+		E51A1D7029539E710050B713 /* RecentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D6F29539E710050B713 /* RecentCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		E51A1D5B2953843D0050B713 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E51A1D6529538C6D0050B713 /* RecentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentViewController.swift; sourceTree = "<group>"; };
 		E51A1D68295392E30050B713 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		E51A1D6D29539DBD0050B713 /* RecentTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTableView.swift; sourceTree = "<group>"; };
+		E51A1D6F29539E710050B713 /* RecentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +140,8 @@
 		E51A1D6A29539B3F0050B713 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				E51A1D6D29539DBD0050B713 /* RecentTableView.swift */,
+				E51A1D6F29539E710050B713 /* RecentCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -239,9 +245,11 @@
 				E51A1D5229536CD30050B713 /* LoginViewController.swift in Sources */,
 				E51A1D6629538C6E0050B713 /* RecentViewController.swift in Sources */,
 				E51A1D3D29536A900050B713 /* AppDelegate.swift in Sources */,
+				E51A1D7029539E710050B713 /* RecentCell.swift in Sources */,
 				E51A1D5A2953806E0050B713 /* Utility.swift in Sources */,
 				E51A1D55295375B50050B713 /* UIView+Extension.swift in Sources */,
 				E51A1D3F29536A900050B713 /* SceneDelegate.swift in Sources */,
+				E51A1D6E29539DBD0050B713 /* RecentTableView.swift in Sources */,
 				E51A1D5729537A0F0050B713 /* SignUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
