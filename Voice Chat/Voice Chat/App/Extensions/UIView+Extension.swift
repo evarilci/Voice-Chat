@@ -20,6 +20,3 @@ extension UIView {
     }
 }
 
-extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-}

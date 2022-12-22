@@ -24,7 +24,7 @@ final class TabBarViewController: UITabBarController {
     // Create all of the tabs and icons of the tabs
     func setupViewControllers(){
         viewControllers = [
-            createNavigationController(for: RecentViewController(),
+            createNavigationController(for: ChatViewController(),
                                        title: NSLocalizedString("Home", comment: ""),
                                        image: UIImage(systemName:"house")!)
 //            createNavigationController(for: SearchViewController(),

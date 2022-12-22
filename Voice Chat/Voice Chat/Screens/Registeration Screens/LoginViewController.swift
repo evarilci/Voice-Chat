@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-final class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController, AlertPresentable {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -19,6 +19,11 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.systemGray6
+        
+        if auth.currentUser != nil {
+            let tabBarViewController = TabBarViewController()
+            self.navigationController?.pushViewController(tabBarViewController, animated: true)
+        } 
       
     }
     
@@ -32,7 +37,7 @@ final class LoginViewController: UIViewController {
                     password: password){ result, err in
             
             if err != nil{
-                print("Error: \(err!.localizedDescription)")
+                self.showAlert(title: "Error", message: err?.localizedDescription, cancelButtonTitle: "Cancel", handler: nil)
                 return
             } else {
                 let tabBarViewController = TabBarViewController()
@@ -51,7 +56,7 @@ final class LoginViewController: UIViewController {
         if email != "" && password != "" {
             auth.createUser(withEmail: email, password: password) { result, error in
                 if error != nil {
-                    print("create user error occured")
+                    self.showAlert(title: "Error", message: error?.localizedDescription, cancelButtonTitle: "Cancel", handler: nil)
                 } else {
                     let tabBarViewController = TabBarViewController()
                     self.navigationController?.pushViewController(tabBarViewController, animated: true)
@@ -66,3 +71,5 @@ final class LoginViewController: UIViewController {
     }
     
 }
+
+
