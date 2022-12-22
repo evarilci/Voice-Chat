@@ -66,56 +66,33 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
     @objc func send() {
         let referance = storage.reference()
         let mediaFolder = referance.child("media")
-        let id = UUID().uuidString
-        let mediaRef = mediaFolder.child(id + K.fileName)
-       
-        
-        
-        let path = getFileURL()
-        
+        let id = UUID().uuidString // using uuid to give uniq names to audiofiles preventing overwrite
+        let mediaRef = mediaFolder.child(id + K.fileName) // creating file referance using uuid + filename
+        let path = getFileURL() // getting filepath
+        guard let sender = auth.currentUser?.email else {return}
         do {
-            let data = try Data(contentsOf: path)
+            let data = try Data(contentsOf: path) // getting data from filepath
             mediaRef.putData(data) { metadata, error in
                 if error != nil {
                     self.showAlert(title: "Error", message: error?.localizedDescription, cancelButtonTitle: "cancel", handler: nil)
                 } else {
                     mediaRef.downloadURL { url, error in
                         let url = url?.absoluteString
-                        print("UPLOADED AND HERE IS YOUR URL MY MASTER: \(url)")
+                        self.db.collection(K.firestore.collectionName).addDocument(data: [K.firestore.senderField: sender,
+                                                                                     K.firestore.body: url!]) { error in
+                            if let e = error {
+                                print(e.localizedDescription)
+                            } else {
+                                print("message sent succesfuly")
+                            }
+                        }
                     }
                 }
             }
-            
-            print("record has come")
-//            let mediaref = mediaFolder.child(K.fileName)
-//            let metadata = StorageMetadata
-//            metadata.contentType = "audio/wav"
-//            if let uploadData = AVFileType(data) {
-//
-//            }
-
         } catch {
-            print("error cant get audio file")
+            showAlert(title: "Error", message: error.localizedDescription, cancelButtonTitle: "cancel", handler: nil)
         }
-       
-        
-//        if let data = soundPlayer.data {
-//            let mediaRef = mediaFolder.child(K.fileName)
-//            mediaRef.putData(data) { metadata, error in
-//                if error != nil {
-//                    self.showAlert(title: "Error", message: error?.localizedDescription, cancelButtonTitle: "Cancel", handler: nil)
-//                } else {
-//                    mediaRef.downloadURL { url, error in
-//                        let url = url?.absoluteString
-//                        print(url)
-//
-//                    }
-//                }
-//            }
-//        }
-        
     }
-    
     @objc func record() {
         if !isRecording {
             isRecording = true
@@ -158,7 +135,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.cellName, for: indexPath) as! ChatCell
-        cell.username = "eymen varilcialsdjlakjsdlakjdkljasldkjaskldjakljdlkadjlakjdlkajdlkajdlkajdklasjdlkasjdalkdjlakjdlakjdkladjkasjdal"
+        cell.username = auth.currentUser?.email!
         return cell
     }
     

@@ -12,6 +12,7 @@ final class ChatCell: UITableViewCell {
     private var nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = .zero
+        label.textColor = UIColor.systemOrange
         return label
     }()
     
@@ -28,6 +29,13 @@ final class ChatCell: UITableViewCell {
         return imageView
     }()
     
+    let playButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Record"), for: .normal)
+        button.tintColor = UIColor.systemIndigo
+        return button
+    }()
+    
     var username : String? {
         set {
             nameLabel.text = newValue!
@@ -41,7 +49,7 @@ final class ChatCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configureLabel()
-        motherView.cornerRadius = nameLabel.frame.height / 5
+       // motherView.cornerRadius = nameLabel.frame.height / 5
     }
     
     required init?(coder: NSCoder) {
@@ -70,13 +78,25 @@ final class ChatCell: UITableViewCell {
             motherView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
         ])
         
+        addSubview(playButton)
+        playButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            playButton.centerYAnchor.constraint(equalTo: motherView.centerYAnchor),
+           // playButton.leadingAnchor.constraint(equalTo: motherView.leadingAnchor, constant: 4),
+            playButton.trailingAnchor.constraint(equalTo: motherView.trailingAnchor, constant: -4),
+            playButton.heightAnchor.constraint(equalToConstant: 50),
+            playButton.widthAnchor.constraint(equalTo: playButton.heightAnchor)
+          
+
+        ])
+        
         addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: motherView.leadingAnchor, constant: 4),
-            nameLabel.trailingAnchor.constraint(equalTo: motherView.trailingAnchor, constant: -4),
+            //nameLabel.leadingAnchor.constraint(equalTo: motherView.leadingAnchor, constant: 4),
+            nameLabel.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -8),
             nameLabel.topAnchor.constraint(equalTo: motherView.topAnchor, constant: 4),
-            nameLabel.bottomAnchor.constraint(equalTo: motherView.bottomAnchor, constant: -4)
+            nameLabel.heightAnchor.constraint(equalToConstant: 17)
             
         ])
         

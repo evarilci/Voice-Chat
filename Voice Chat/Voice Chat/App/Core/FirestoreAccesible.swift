@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 protocol FireBaseFireStoreAccessible {}
 
@@ -21,5 +22,8 @@ extension FireBaseFireStoreAccessible {
     
     var StorageMetadata: StorageMetadata {
         FirebaseStorage.StorageMetadata()
+    }
+    var auth: Auth {
+        Auth.auth()
     }
 }

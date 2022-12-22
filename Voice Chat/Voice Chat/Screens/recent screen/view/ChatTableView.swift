@@ -41,7 +41,7 @@ final class ChatTableView: UIView {
          setTableViewConstraints()
          tableView.register(ChatCell.self, forCellReuseIdentifier: K.cellName)
          tableView.separatorStyle = .none
-         
+         tableView.rowHeight = 82
          
      }
      
