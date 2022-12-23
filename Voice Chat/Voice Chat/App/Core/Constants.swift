@@ -21,3 +21,8 @@ struct K {
 }
 
 
+struct Message {
+    let sender : String
+    let url : String
+    //let date : String
+}

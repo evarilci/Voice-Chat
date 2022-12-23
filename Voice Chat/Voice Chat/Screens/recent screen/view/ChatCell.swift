@@ -8,24 +8,36 @@
 import UIKit
 
 final class ChatCell: UITableViewCell {
+    
+    var action : (() -> Void)? = nil
+    
+    @objc func messagePlayer(sender: UIButton) {
+        action?()
+    }
 
     private var nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = .zero
-        label.textColor = UIColor.systemOrange
+        label.textColor = UIColor.systemMint
         return label
     }()
     
-    private var motherView : UIView = {
+     var motherView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray5
         return view
         
     }()
     
-    private var iconImage : UIImageView = {
+     var meSender : UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.circle.fill")
+        return imageView
+    }()
+    
+     var youSender : UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "person.circle")
         return imageView
     }()
     
@@ -33,8 +45,12 @@ final class ChatCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "Record"), for: .normal)
         button.tintColor = UIColor.systemIndigo
+        button.isUserInteractionEnabled = true
+        
         return button
     }()
+    
+   
     
     var username : String? {
         set {
@@ -47,9 +63,10 @@ final class ChatCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        //playButton.addTarget(ChatViewController(), action: #selector(messagePlayer(sender:)), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(messagePlayer(sender:)), for: .touchUpInside)
         configureLabel()
-       // motherView.cornerRadius = nameLabel.frame.height / 5
+       
     }
     
     required init?(coder: NSCoder) {
@@ -60,25 +77,36 @@ final class ChatCell: UITableViewCell {
         
        
         
-        addSubview(iconImage)
-        iconImage.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(meSender)
+        meSender.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            iconImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 4),
-            iconImage.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -4),
-            iconImage.heightAnchor.constraint(equalToConstant: 40),
-            iconImage.widthAnchor.constraint(equalToConstant: 40)
+            meSender.topAnchor.constraint(equalTo: self.topAnchor, constant: 4),
+            meSender.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -4),
+            meSender.heightAnchor.constraint(equalToConstant: 40),
+            meSender.widthAnchor.constraint(equalToConstant: 40)
         ])
         
+        
+        
+        addSubview(youSender)
+        youSender.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            youSender.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 4),
+            youSender.topAnchor.constraint(equalTo: self.topAnchor, constant: 4),
+            youSender.heightAnchor.constraint(equalToConstant: 40),
+            youSender.widthAnchor.constraint(equalToConstant: 40)
+        ])
+    
         addSubview(motherView)
         motherView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            motherView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            motherView.trailingAnchor.constraint(equalTo: iconImage.leadingAnchor, constant: -8),
+            motherView.leadingAnchor.constraint(equalTo: youSender.trailingAnchor, constant: 8),
+            motherView.trailingAnchor.constraint(equalTo: meSender.leadingAnchor, constant: -8),
             motherView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
             motherView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
         ])
         
-        addSubview(playButton)
+        contentView.addSubview(playButton)
         playButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             playButton.centerYAnchor.constraint(equalTo: motherView.centerYAnchor),

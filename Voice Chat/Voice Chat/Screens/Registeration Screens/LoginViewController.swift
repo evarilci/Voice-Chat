@@ -16,16 +16,23 @@ final class LoginViewController: UIViewController, AlertPresentable {
     @IBOutlet weak var signUpBTN: UIButton!
     let auth = Auth.auth()
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.systemGray6
-        
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tabBarController?.tabBar.isHidden = true
         if auth.currentUser != nil {
             let tabBarViewController = TabBarViewController()
             self.navigationController?.pushViewController(tabBarViewController, animated: true)
-        } 
+        } else {
+           
+        }
       
     }
+    
     
     @IBAction func signInClicked(_ sender: Any) {
         guard let email = emailTextField.text, let password = passwordTextField.text else {
