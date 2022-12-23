@@ -138,7 +138,6 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
             try! session.setCategory(AVAudioSession.Category.playAndRecord, options:AVAudioSession.CategoryOptions.defaultToSpeaker)
             
             //start recorder
-            
             do {
                 try soundRecorder = AVAudioRecorder(url: filePath!, settings: [:])
                 soundRecorder.delegate = self
@@ -151,9 +150,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
         } else {
             isRecording = false
             soundRecorder.stop()
-            
         }
-        
     }
     
     @objc func logOut() {
@@ -168,51 +165,35 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
                 print("sign out failed")
             }
         }
-        
-        
     }
-    
-    
-    func downloadFile(withUrl url: URL, andFilePath filePath: URL, completion: @escaping ((_ filePath: URL)->Void)){
-        DispatchQueue.global(qos: .background).async {
-            do {
-                let data = try Data.init(contentsOf: url)
-                try data.write(to: filePath, options: .atomic)
-                print("saved at \(filePath.absoluteString)")
-                DispatchQueue.main.async {
-                    completion(filePath)
+    func playOnMessage(row: Int) {
+        let url = URL(string: messages[row].url)!
+        let downloadTask = URLSession.shared.downloadTask(with: url) { url, response, error in
+            if error != nil {
+                print("error in url session")
+            } else {
+                guard let path = url else {return}
+                do {
+                    let documentPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                    let savedPath = documentPath.appendingPathComponent(path.lastPathComponent)
+                    try FileManager.default.moveItem(at: path, to: savedPath)
+                                           let session = AVAudioSession.sharedInstance()
+                                           try session.setCategory(AVAudioSession.Category.playback)
+                    
+                                           let soundData = try Data(contentsOf: savedPath)
+                                           self.soundPlayer = try AVAudioPlayer(data: soundData)
+                                           self.soundPlayer.prepareToPlay()
+                                           self.soundPlayer.volume = 1
+                                            self.soundPlayer.play()
+                                           self.soundPlayer.delegate = self
+                    
+                } catch {
+                    self.showAlert(title: "Error", message: error.localizedDescription, cancelButtonTitle: "Cancel", handler: nil)
                 }
-            } catch {
-                print("an error happened while downloading or saving the file")
             }
         }
+        downloadTask.resume()
     }
-    
-    
-//    func playOnMessage() {
-//        let row = Int()
-//
-//        let url = URL(string: messages[row].url)!
-//
-//
-//
-////        do {
-////            let session = AVAudioSession.sharedInstance()
-////            try session.setCategory(AVAudioSession.Category.playback)
-////            DispatchQueue.main.async {
-////
-////            }
-////            let soundData = try Data(contentsOf: url)
-////            self.soundPlayer = try AVAudioPlayer(data: soundData)
-////            self.soundPlayer.prepareToPlay()
-////            self.soundPlayer.volume = 1
-////            self.soundPlayer.delegate = self
-////            print("\(url)")
-////        } catch {
-////            print("cant download or play music")
-////        }
-//    }
-    
 }
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -229,7 +210,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         cell.playButton.tag = indexPath.row
         cell.action = {
            
-           // self.playOnMessage()
+            self.playOnMessage(row: indexPath.row)
         }
         if message.sender == auth.currentUser?.email {
             cell.youSender.isHidden = true
@@ -240,12 +221,8 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
             cell.youSender.isHidden = false
             cell.motherView.backgroundColor = .systemGray5
         }
-        
-        
-        
         return cell
     }
-    
 }
 
 extension ChatViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
@@ -253,5 +230,4 @@ extension ChatViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         
     }
-    
 }
