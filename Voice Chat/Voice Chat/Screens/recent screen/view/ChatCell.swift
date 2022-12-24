@@ -63,7 +63,6 @@ final class ChatCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        //playButton.addTarget(ChatViewController(), action: #selector(messagePlayer(sender:)), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(messagePlayer(sender:)), for: .touchUpInside)
         configureLabel()
        

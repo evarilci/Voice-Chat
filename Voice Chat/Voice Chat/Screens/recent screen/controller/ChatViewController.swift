@@ -14,15 +14,24 @@ import AVFoundation
 final class ChatViewController: UIViewController, AlertPresentable, FireBaseFireStoreAccessible {
     
     let mainView = ChatTableView()
-    let pitch = AVAudioUnitTimePitch()
+    
     var soundPlayer : AVAudioPlayer!
-    let cell = ChatCell()
     var soundRecorder: AVAudioRecorder!
-    var timer = Timer()
-    //var stopWatch  = Stopwatch()
     var isRecording = false
     var messages : [Message] = []
+    var audioEngine = AVAudioEngine()
+    let pitch = AVAudioUnitTimePitch()
+    let speedControl = AVAudioUnitVarispeed()
+    var audioMixer: AVAudioMixerNode!
     
+    // var recordedAudioURL: URL!
+    var audioFile: AVAudioFile!
+    
+    var audioPlayerNode: AVAudioPlayerNode!
+    //var stopTimer: Timer!
+    
+    var filteredOutputURL: NSURL!
+    var newAudio: AVAudioFile!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +41,11 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
         mainView.micButton.addTarget(self, action: #selector(record), for: .touchUpInside)
         mainView.playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
         mainView.sendButton.addTarget(self, action: #selector(send), for: .touchUpInside)
+        mainView.lowPitchPlayButton.addTarget(self, action: #selector(lowPitchPlay), for: .touchUpInside)
+        mainView.highPitchPlayButton.addTarget(self, action: #selector(highPitchPlay), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logOut))
-        
-        
         loadMessages()
+        setupAudio()
     }
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -63,10 +73,21 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
     @objc func play() {
         let audioSession = AVAudioSession.sharedInstance()
         try! audioSession.setActive(true)
-        setupPlayer()
-        soundPlayer.play()
-        
+        playSound()
     }
+    
+    @objc func lowPitchPlay() {
+        let audioSession = AVAudioSession.sharedInstance()
+        try! audioSession.setActive(true)
+        playSound(pitch: -600)
+    }
+    
+    @objc func highPitchPlay() {
+        let audioSession = AVAudioSession.sharedInstance()
+        try! audioSession.setActive(true)
+        playSound(pitch: 600)
+    }
+    
     
     func loadMessages() {
         
@@ -85,20 +106,25 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
                                 print(self.messages.count)
                                 DispatchQueue.main.async {
                                     self.mainView.tableView.reloadData()
+                                    let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
+                                    self.mainView.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                                    
                                 }
                             }
                         }
                     }
                 }
             }
-        }
+    }
     
     @objc func send() {
+        
         let referance = storage.reference()
         let mediaFolder = referance.child("media")
         let id = UUID().uuidString // using uuid to give uniq names to audiofiles preventing overwrite
         let mediaRef = mediaFolder.child(id + K.fileName) // creating file referance using uuid + filename
-        let path = getFileURL() // getting filepath
+        let path = newAudio.url // getting filepath
+        //let path = audioFile
         guard let sender = auth.currentUser?.email else {return}
         do {
             let data = try Data(contentsOf: path) // getting data from filepath
@@ -127,7 +153,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
     @objc func record() {
         if !isRecording {
             isRecording = true
-            
+            mainView.micButton.setImage(UIImage(named: "Stop"), for: .normal)
             let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
             let pathArray = [dirPath, K.fileName]
             //create file path
@@ -149,6 +175,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
             }
         } else {
             isRecording = false
+            mainView.micButton.setImage(UIImage(named: "Record"), for: .normal)
             soundRecorder.stop()
         }
     }
@@ -177,15 +204,15 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
                     let documentPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
                     let savedPath = documentPath.appendingPathComponent(path.lastPathComponent)
                     try FileManager.default.moveItem(at: path, to: savedPath)
-                                           let session = AVAudioSession.sharedInstance()
-                                           try session.setCategory(AVAudioSession.Category.playback)
+                    let session = AVAudioSession.sharedInstance()
+                    try session.setCategory(AVAudioSession.Category.playback)
                     
-                                           let soundData = try Data(contentsOf: savedPath)
-                                           self.soundPlayer = try AVAudioPlayer(data: soundData)
-                                           self.soundPlayer.prepareToPlay()
-                                           self.soundPlayer.volume = 1
-                                            self.soundPlayer.play()
-                                           self.soundPlayer.delegate = self
+                    let soundData = try Data(contentsOf: savedPath)
+                    self.soundPlayer = try AVAudioPlayer(data: soundData)
+                    self.soundPlayer.prepareToPlay()
+                    self.soundPlayer.volume = 1
+                    self.soundPlayer.play()
+                    self.soundPlayer.delegate = self
                     
                 } catch {
                     self.showAlert(title: "Error", message: error.localizedDescription, cancelButtonTitle: "Cancel", handler: nil)
@@ -209,7 +236,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.playButton.tag = indexPath.row
         cell.action = {
-           
+            
             self.playOnMessage(row: indexPath.row)
         }
         if message.sender == auth.currentUser?.email {
@@ -221,13 +248,126 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
             cell.youSender.isHidden = false
             cell.motherView.backgroundColor = .systemGray5
         }
+        cell.motherView.cornerRadius = cell.motherView.frame.height / 5
         return cell
     }
 }
 
 extension ChatViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+    // MARK: Audio Functions
+    
+    func setupAudio() {
+        // initialize (recording) audio file
+        do {
+            audioFile = try AVAudioFile(forReading: getFileURL() as URL)
+        } catch {
+            print("error: \(error)")
+        }
+    }
+    
+    
+    func playSound(rate: Float? = nil, pitch: Float? = nil, echo: Bool = false, reverb: Bool = false) {
         
+        // initialize audio engine components
+        audioEngine = AVAudioEngine()
+        
+        // node for playing audio
+        audioPlayerNode = AVAudioPlayerNode()
+        audioEngine.attach(audioPlayerNode)
+        
+        audioMixer = AVAudioMixerNode()
+        audioEngine.attach(audioMixer)
+        
+        // node for adjusting rate/pitch
+        let changeRatePitchNode = AVAudioUnitTimePitch()
+        if let pitch = pitch {
+            changeRatePitchNode.pitch = pitch
+        }
+        if let rate = rate {
+            changeRatePitchNode.rate = rate
+        }
+        audioEngine.attach(changeRatePitchNode)
+        
+        // node for echo
+        let echoNode = AVAudioUnitDistortion()
+        echoNode.loadFactoryPreset(.multiEcho1)
+        audioEngine.attach(echoNode)
+        
+        // node for reverb
+        let reverbNode = AVAudioUnitReverb()
+        reverbNode.loadFactoryPreset(.cathedral)
+        reverbNode.wetDryMix = 50
+        audioEngine.attach(reverbNode)
+        
+        
+        // connect nodes
+        if echo == true && reverb == true {
+            connectAudioNodes(audioPlayerNode, changeRatePitchNode, echoNode, reverbNode, audioMixer, audioEngine.outputNode)
+        } else if echo == true {
+            connectAudioNodes(audioPlayerNode, changeRatePitchNode, echoNode, audioMixer, audioEngine.outputNode)
+        } else if reverb == true {
+            connectAudioNodes(audioPlayerNode, changeRatePitchNode, reverbNode, audioMixer, audioEngine.outputNode)
+        } else {
+            connectAudioNodes(audioPlayerNode, changeRatePitchNode, audioMixer, audioEngine.outputNode)
+        }
+        
+        
+        // schedule to play and start the engine!
+        audioPlayerNode.stop()
+        audioPlayerNode.scheduleFile(audioFile, at: nil) {
+            
+        }
+        
+        do {
+            try audioEngine.start()
+            
+        } catch {
+            self.showAlert(title: "Error", message: error.localizedDescription, cancelButtonTitle: "cancel", handler: nil)
+            return
+        }
+        
+        let audioAsset = AVURLAsset.init(url: getFileURL(), options: nil)
+        let durationInSeconds = CMTimeGetSeconds(audioAsset.duration)
+        
+        
+        let dirPaths: AnyObject = NSSearchPathForDirectoriesInDomains( FileManager.SearchPathDirectory.documentDirectory,  FileManager.SearchPathDomainMask.userDomainMask, true)[0] as AnyObject
+        let tmpFileUrl: NSURL = NSURL.fileURL(withPath: dirPaths.appendingPathComponent("effectedSound.caf")) as NSURL
+        
+        filteredOutputURL = tmpFileUrl
+        
+        do{
+            print(dirPaths)
+            self.newAudio = try AVAudioFile(forWriting: tmpFileUrl as URL, settings: [:])
+            
+            audioMixer.installTap(onBus: 0, bufferSize: (AVAudioFrameCount(durationInSeconds)), format: self.audioPlayerNode.outputFormat(forBus: 0)){ [self]
+                (buffer: AVAudioPCMBuffer!, time: AVAudioTime!)  in
+                
+                if (self.newAudio!.length) < (self.audioFile.length){
+                    
+                    do{
+                        //print(buffer)
+                        try self.newAudio!.write(from: buffer)
+                    }catch _{
+                        print("Problem Writing Buffer")
+                    }
+                }else{
+                    audioPlayerNode.removeTap(onBus: 0)
+                }
+                
+            }
+        }catch _{
+            print("Problem")
+        }
+        
+        // play the recording!
+        audioPlayerNode.play()
+        
+    }
+    
+    func connectAudioNodes(_ nodes: AVAudioNode...) {
+        for x in 0..<nodes.count-1 {
+            audioEngine.connect(nodes[x], to: nodes[x+1], format: audioFile.processingFormat)
+        }
     }
 }

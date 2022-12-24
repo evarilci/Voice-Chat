@@ -11,6 +11,8 @@ import Foundation
 struct K {
     static let fileName = "recordedVoice.wav"
     static let cellName = "recentCell"
+    static let highPitch = "HighPitch"
+    static let lowPitch = "LowPitch"
     
     struct firestore {
         static let collectionName = "messages"

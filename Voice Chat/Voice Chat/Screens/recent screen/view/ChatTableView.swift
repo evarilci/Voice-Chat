@@ -9,7 +9,6 @@ import UIKit
 
 final class ChatTableView: UIView {
 
-    
     let tableView = UITableView()
     let messageLine : UIView = {
         let view = UIView()
@@ -29,6 +28,18 @@ final class ChatTableView: UIView {
         return button
     }()
     
+    let lowPitchPlayButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: K.lowPitch), for: .normal)
+        return button
+    }()
+    
+    let highPitchPlayButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: K.highPitch), for: .normal)
+        return button
+    }()
+    
     let sendButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "paperplane"), for: .normal)
@@ -42,6 +53,7 @@ final class ChatTableView: UIView {
          tableView.register(ChatCell.self, forCellReuseIdentifier: K.cellName)
          tableView.separatorStyle = .none
          tableView.rowHeight = 82
+        
          
      }
      
@@ -76,15 +88,44 @@ final class ChatTableView: UIView {
             micButton.widthAnchor.constraint(equalTo: micButton.heightAnchor)
          ])
          
+        
+         
+         
+         addSubview(highPitchPlayButton)
+         highPitchPlayButton.translatesAutoresizingMaskIntoConstraints = false
+         NSLayoutConstraint.activate([
+            highPitchPlayButton.centerYAnchor.constraint(equalTo: micButton.centerYAnchor),
+            highPitchPlayButton.trailingAnchor.constraint(equalTo: micButton.leadingAnchor, constant: -16),
+            highPitchPlayButton.widthAnchor.constraint(equalTo: micButton.widthAnchor, multiplier: 1 / 2),
+            highPitchPlayButton.heightAnchor.constraint(equalTo: highPitchPlayButton.widthAnchor)
+            
+
+         ])
+         
+         
+         addSubview(lowPitchPlayButton)
+         lowPitchPlayButton.translatesAutoresizingMaskIntoConstraints = false
+         NSLayoutConstraint.activate([
+            lowPitchPlayButton.centerYAnchor.constraint(equalTo: micButton.centerYAnchor),
+            lowPitchPlayButton.trailingAnchor.constraint(equalTo: highPitchPlayButton.leadingAnchor, constant: -16),
+            lowPitchPlayButton.widthAnchor.constraint(equalTo: highPitchPlayButton.widthAnchor),
+            lowPitchPlayButton.heightAnchor.constraint(equalTo: lowPitchPlayButton.widthAnchor)
+            
+
+         ])
+         
+         
          addSubview(playButton)
          playButton.translatesAutoresizingMaskIntoConstraints = false
          NSLayoutConstraint.activate([
             playButton.centerYAnchor.constraint(equalTo: micButton.centerYAnchor),
-            playButton.trailingAnchor.constraint(equalTo: micButton.leadingAnchor, constant: -32),
+            playButton.trailingAnchor.constraint(equalTo: lowPitchPlayButton.leadingAnchor, constant: -16),
             playButton.widthAnchor.constraint(equalTo: micButton.widthAnchor, multiplier: 1 / 2),
             playButton.heightAnchor.constraint(equalTo: playButton.widthAnchor)
+            
 
          ])
+         
 
          addSubview(sendButton)
          sendButton.translatesAutoresizingMaskIntoConstraints = false
