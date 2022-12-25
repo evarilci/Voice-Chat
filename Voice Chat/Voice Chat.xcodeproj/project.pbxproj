@@ -15,7 +15,6 @@
 		E51A1D5229536CD30050B713 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D5129536CD30050B713 /* LoginViewController.swift */; };
 		E51A1D55295375B50050B713 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D54295375B40050B713 /* UIView+Extension.swift */; };
 		E51A1D5729537A0F0050B713 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D5629537A0F0050B713 /* SignUpViewController.swift */; };
-		E51A1D5A2953806E0050B713 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D592953806E0050B713 /* Utility.swift */; };
 		E51A1D5C2953843D0050B713 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E51A1D5B2953843D0050B713 /* GoogleService-Info.plist */; };
 		E51A1D5F295386C00050B713 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E51A1D5E295386C00050B713 /* FirebaseAnalytics */; };
 		E51A1D61295386C00050B713 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E51A1D60295386C00050B713 /* FirebaseAuth */; };
@@ -25,8 +24,6 @@
 		E51A1D6E29539DBD0050B713 /* ChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D6D29539DBD0050B713 /* ChatTableView.swift */; };
 		E51A1D7029539E710050B713 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D6F29539E710050B713 /* ChatCell.swift */; };
 		E51A1D7229548B520050B713 /* AlertPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A1D7129548B520050B713 /* AlertPresentable.swift */; };
-		E5511C072954B6B200A74BDA /* ChatModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5511C062954B6B200A74BDA /* ChatModelView.swift */; };
-		E5511C092954CDA100A74BDA /* Stopwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5511C082954CDA100A74BDA /* Stopwatch.swift */; };
 		E5511C0B2954D43600A74BDA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5511C0A2954D43600A74BDA /* Constants.swift */; };
 		E5511C0D2954E76C00A74BDA /* FirestoreAccesible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5511C0C2954E76C00A74BDA /* FirestoreAccesible.swift */; };
 		E5511C102954EEC600A74BDA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E5511C0F2954EEC600A74BDA /* FirebaseStorage */; };
@@ -43,15 +40,12 @@
 		E51A1D5129536CD30050B713 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E51A1D54295375B40050B713 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		E51A1D5629537A0F0050B713 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
-		E51A1D592953806E0050B713 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		E51A1D5B2953843D0050B713 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E51A1D6529538C6D0050B713 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		E51A1D68295392E30050B713 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		E51A1D6D29539DBD0050B713 /* ChatTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableView.swift; sourceTree = "<group>"; };
 		E51A1D6F29539E710050B713 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		E51A1D7129548B520050B713 /* AlertPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresentable.swift; sourceTree = "<group>"; };
-		E5511C062954B6B200A74BDA /* ChatModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModelView.swift; sourceTree = "<group>"; };
-		E5511C082954CDA100A74BDA /* Stopwatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopwatch.swift; sourceTree = "<group>"; };
 		E5511C0A2954D43600A74BDA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E5511C0C2954E76C00A74BDA /* FirestoreAccesible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreAccesible.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,9 +116,7 @@
 		E51A1D58295380510050B713 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				E51A1D592953806E0050B713 /* Utility.swift */,
 				E51A1D7129548B520050B713 /* AlertPresentable.swift */,
-				E5511C082954CDA100A74BDA /* Stopwatch.swift */,
 				E5511C0A2954D43600A74BDA /* Constants.swift */,
 				E5511C0C2954E76C00A74BDA /* FirestoreAccesible.swift */,
 			);
@@ -135,7 +127,6 @@
 			isa = PBXGroup;
 			children = (
 				E51A1D6C29539B500050B713 /* controller */,
-				E51A1D6B29539B460050B713 /* viewModel */,
 				E51A1D6A29539B3F0050B713 /* view */,
 			);
 			path = "recent screen";
@@ -156,14 +147,6 @@
 				E51A1D6F29539E710050B713 /* ChatCell.swift */,
 			);
 			path = view;
-			sourceTree = "<group>";
-		};
-		E51A1D6B29539B460050B713 /* viewModel */ = {
-			isa = PBXGroup;
-			children = (
-				E5511C062954B6B200A74BDA /* ChatModelView.swift */,
-			);
-			path = viewModel;
 			sourceTree = "<group>";
 		};
 		E51A1D6C29539B500050B713 /* controller */ = {
@@ -292,15 +275,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E51A1D69295392E30050B713 /* TabBarViewController.swift in Sources */,
-				E5511C092954CDA100A74BDA /* Stopwatch.swift in Sources */,
 				E5511C0D2954E76C00A74BDA /* FirestoreAccesible.swift in Sources */,
 				E51A1D5229536CD30050B713 /* LoginViewController.swift in Sources */,
 				E51A1D7229548B520050B713 /* AlertPresentable.swift in Sources */,
 				E51A1D6629538C6E0050B713 /* ChatViewController.swift in Sources */,
 				E51A1D3D29536A900050B713 /* AppDelegate.swift in Sources */,
 				E51A1D7029539E710050B713 /* ChatCell.swift in Sources */,
-				E5511C072954B6B200A74BDA /* ChatModelView.swift in Sources */,
-				E51A1D5A2953806E0050B713 /* Utility.swift in Sources */,
 				E51A1D55295375B50050B713 /* UIView+Extension.swift in Sources */,
 				E51A1D3F29536A900050B713 /* SceneDelegate.swift in Sources */,
 				E5511C0B2954D43600A74BDA /* Constants.swift in Sources */,

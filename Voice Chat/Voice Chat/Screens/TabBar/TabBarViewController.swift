@@ -27,12 +27,7 @@ final class TabBarViewController: UITabBarController {
             createNavigationController(for: ChatViewController(),
                                        title: NSLocalizedString("Home", comment: ""),
                                        image: UIImage(systemName:"house")!)
-//            createNavigationController(for: SearchViewController(),
-//                                       title: NSLocalizedString("Search", comment: ""),
-//                                       image: UIImage(named:"search")!),
-//            createNavigationController(for: ProfileViewController(),
-//                                       title: NSLocalizedString("Profile", comment: ""),
-//                                       image: UIImage(named:"person")!)
+
         ]
     }
     
@@ -43,7 +38,8 @@ final class TabBarViewController: UITabBarController {
         let navigationController = UINavigationController(rootViewController: rootViewController)
         navigationController.tabBarItem.title = title
         navigationController.tabBarItem.image = image
-        navigationController.navigationBar.prefersLargeTitles = true
+        navigationController.navigationBar.prefersLargeTitles = false
+        navigationController.navigationBar.topItem?.largeTitleDisplayMode = .never
         rootViewController.navigationItem.title = title
         return navigationController
     }

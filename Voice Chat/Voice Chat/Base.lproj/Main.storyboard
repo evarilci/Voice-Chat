@@ -33,22 +33,6 @@
                                     <action selector="signInClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NsE-FO-bFw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1UL-av-RRT">
-                                <rect key="frame" x="104" y="783.66666666666663" width="182" height="34.333333333333371"/>
-                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Sign up">
-                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </buttonConfiguration>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="signUpClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kAs-aO-cNV"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Voicer!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hc4-HD-bIJ">
                                 <rect key="frame" x="16" y="91" width="358" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
@@ -72,19 +56,38 @@
                                     </textField>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1UL-av-RRT">
+                                <rect key="frame" x="102.66666666666669" y="743" width="185" height="50"/>
+                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="mZO-XA-1E4"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Sign up">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="signUpClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kAs-aO-cNV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="1UL-av-RRT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="102.67" id="2HF-aB-so1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="1UL-av-RRT" secondAttribute="bottom" constant="17" id="2ni-QZ-ijG"/>
                             <constraint firstItem="SKl-Pc-MKh" firstAttribute="top" secondItem="hc4-HD-bIJ" secondAttribute="bottom" constant="170" id="2sh-GY-h8x"/>
                             <constraint firstItem="hc4-HD-bIJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="GyR-XZ-RCu"/>
-                            <constraint firstItem="1UL-av-RRT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="104" id="Hl6-TJ-4Kz"/>
                             <constraint firstItem="pH4-IP-yLu" firstAttribute="top" secondItem="SKl-Pc-MKh" secondAttribute="bottom" constant="47" id="IlA-Gb-cWC"/>
                             <constraint firstItem="pH4-IP-yLu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="JfJ-1X-aaM"/>
-                            <constraint firstItem="1UL-av-RRT" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="8" id="PNV-Al-9L7"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pH4-IP-yLu" secondAttribute="trailing" constant="16" id="UQr-Lu-qxn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1UL-av-RRT" secondAttribute="trailing" constant="104" id="aYK-yu-2N4"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SKl-Pc-MKh" secondAttribute="trailing" constant="16" id="ffk-oj-Pht"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1UL-av-RRT" secondAttribute="trailing" constant="102.33" id="j1x-hT-08F"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hc4-HD-bIJ" secondAttribute="trailing" constant="16" id="pks-xK-WnM"/>
                             <constraint firstItem="hc4-HD-bIJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="wH6-Zo-NzK"/>
                             <constraint firstItem="SKl-Pc-MKh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="zOC-O0-Lmv"/>

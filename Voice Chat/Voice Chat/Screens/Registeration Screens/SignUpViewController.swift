@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+// MARK: UNUSED
 final class SignUpViewController: UIViewController {
     @IBOutlet weak var cancelBTN: UIButton!
     @IBOutlet weak var signUpLabel: UILabel!
@@ -32,16 +34,7 @@ final class SignUpViewController: UIViewController {
         imageView.clipsToBounds = true
     }
     
-    private func validateFields(name: String, email: String, password: String, phone: String, phoneCode: String) -> Bool {
-        if isValid(email: email) && name != "" && isValid(phone: phone) && password.count >= 6 && phoneCode != "" {
-            return true
-        } else {
-            return false
-        }
-        
-        
-        
-    }
+    
     
     @objc func profileImageClicked() {
         

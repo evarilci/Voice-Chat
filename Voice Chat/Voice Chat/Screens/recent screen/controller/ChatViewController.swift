@@ -23,20 +23,18 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
     let pitch = AVAudioUnitTimePitch()
     let speedControl = AVAudioUnitVarispeed()
     var audioMixer: AVAudioMixerNode!
-    
-    // var recordedAudioURL: URL!
     var audioFile: AVAudioFile!
-    
     var audioPlayerNode: AVAudioPlayerNode!
-    //var stopTimer: Timer!
-    
     var filteredOutputURL: NSURL!
     var newAudio: AVAudioFile!
     
+    
+    // MARK: Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view = mainView
+        view.backgroundColor = UIColor.systemGray6
         mainView.setTableViewDelegates(delegate: self, datasource: self)
         mainView.micButton.addTarget(self, action: #selector(record), for: .touchUpInside)
         mainView.playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
@@ -47,10 +45,13 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
         loadMessages()
         setupAudio()
     }
+    
+    // FileManager path
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
+    // get audio document path url
     func getFileURL() -> URL {
         let path = getDocumentsDirectory()
         let filePath = path.appendingPathComponent(K.fileName)
@@ -58,6 +59,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
         return filePath
     }
     
+    // setting player
     func setupPlayer() {
         let audioFilename = getDocumentsDirectory().appendingPathComponent(K.fileName)
         do {
@@ -70,6 +72,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
         }
     }
     
+    // @objc methods for button actions
     @objc func play() {
         let audioSession = AVAudioSession.sharedInstance()
         try! audioSession.setActive(true)
@@ -89,6 +92,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
     }
     
     
+    // fetch realtime data from firestore and reload tableView
     func loadMessages() {
         
         db.collection(K.firestore.collectionName)
@@ -117,6 +121,7 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
             }
     }
     
+    // send data to firestore and storage
     @objc func send() {
         
         let referance = storage.reference()
@@ -193,6 +198,8 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
             }
         }
     }
+    
+    // download message
     func playOnMessage(row: Int) {
         let url = URL(string: messages[row].url)!
         let downloadTask = URLSession.shared.downloadTask(with: url) { url, response, error in
@@ -222,6 +229,8 @@ final class ChatViewController: UIViewController, AlertPresentable, FireBaseFire
         downloadTask.resume()
     }
 }
+
+// MARK: TableView delegate and dataSource
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
@@ -255,7 +264,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ChatViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
-    // MARK: Audio Functions
+    // MARK: Audio Changer Functions
     
     func setupAudio() {
         // initialize (recording) audio file
@@ -330,6 +339,11 @@ extension ChatViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
         let audioAsset = AVURLAsset.init(url: getFileURL(), options: nil)
         let durationInSeconds = CMTimeGetSeconds(audioAsset.duration)
         
+        
+        let length = 40000000
+        let buffer = AVAudioPCMBuffer(pcmFormat: audioPlayerNode.outputFormat(forBus: 0),frameCapacity:AVAudioFrameCount(length))
+        buffer!.frameLength = AVAudioFrameCount(durationInSeconds)
+
         
         let dirPaths: AnyObject = NSSearchPathForDirectoriesInDomains( FileManager.SearchPathDirectory.documentDirectory,  FileManager.SearchPathDomainMask.userDomainMask, true)[0] as AnyObject
         let tmpFileUrl: NSURL = NSURL.fileURL(withPath: dirPaths.appendingPathComponent("effectedSound.caf")) as NSURL
